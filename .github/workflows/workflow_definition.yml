@@ -1,0 +1,76 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+#   schedule: 
+#     # * is a special character in YAML so you have to quote this string
+#     - cron:  '*/15 * * * *'   # Runs every 15 mins
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+#   runs-on: self-hosted 
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: Dump Github content
+      env:
+        EVENT_METADATA: ${{ toJSON(github) }}
+      run: echo "$EVENT_METADATA"
+
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    # Extra step requied for private beta .. 
+    - name: Checkout the action from a private repository
+      uses: actions/checkout@v2
+      with:
+        repository: vijejain/cicd-actions
+        ref: refs/heads/main
+        token: ${{ secrets.PAT }}
+        path: ./.github/vijejain/cicd-actions
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+
+    - name: AWS CodeGuru Reviewer
+      uses: ./.github/vijejain/cicd-actions 
+      with:          
+        name: ${{ github.event.repository.name }}
+        source_path: . # Java source code root
+        build_path: target # build artifact(s) directory
+        event_metadata: ${{ toJSON(github.event) }}
+        
+
+    - name: Upload review result
+      if: ${{ always() }} 
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: codeguru-results.sarif.json
