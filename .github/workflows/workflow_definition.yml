@@ -48,10 +48,10 @@ jobs:
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
       with:
-        repository: vijejain/cicd-actions
+        repository: martinschaef/cicd-actions
         ref: refs/heads/main
         token: ${{ secrets.PAT }}
-        path: ./.github/vijejain/cicd-actions
+        path: ./.github/martinschaef/cicd-actions
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -61,7 +61,7 @@ jobs:
         aws-region: us-west-2
 
     - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions 
+      uses: ./.github/martinschaef/cicd-actions 
       with:          
         name: ${{ github.event.repository.name }}
         source_path: . # Java source code root
