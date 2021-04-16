@@ -62,12 +62,11 @@ jobs:
 
     - name: AWS CodeGuru Reviewer
       uses: ./.github/martinschaef/cicd-actions 
+      continue-on-error: true
       with:          
-        name: ${{ github.event.repository.name }}
+        name: cicd-workflow
         source_path: . # Java source code root
-        build_path: target # build artifact(s) directory
-        event_metadata: ${{ toJSON(github.event) }}
-        
+        build_path: target # build artifact(s) directory        
 
     - name: Upload review result
       if: ${{ always() }} 
