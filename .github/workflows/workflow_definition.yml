@@ -64,7 +64,7 @@ jobs:
       uses: ./.github/martinschaef/cicd-actions 
       continue-on-error: true
       with:          
-        name: cicd-workflow
+        name: cicd-demo
         source_path: . # Java source code root
         build_path: target # build artifact(s) directory        
 
