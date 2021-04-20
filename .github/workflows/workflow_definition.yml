@@ -61,7 +61,7 @@ jobs:
       uses: ./.github/vijejain/cicd-actions 
       continue-on-error: true
       with:          
-        name: first-cicd-repo
+        name: cicd-repo-2
         source_path: . # Java source code root
         build_path: target # build artifact(s) directory
 
