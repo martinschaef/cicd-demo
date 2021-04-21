@@ -62,8 +62,8 @@ jobs:
       continue-on-error: true
       with:          
         name: cicd-repo-2
-        source_path: . # Java source code root
-        build_path: target # build artifact(s) directory
+        source_path: ./owasp-benchmark/src # Java source code root
+        build_path: ./owasp-benchmark/by_cwe_jars # build artifact(s) directory
 
     - name: Upload review result
       continue-on-error: true
