@@ -55,7 +55,7 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./owasp-benchmark/by_cwe_jars/owasp-cwe022-only.jar
+        build_path: ./owasp-benchmark/by_cwe_jars/cwe022
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
@@ -94,7 +94,7 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./owasp-benchmark/by_cwe_jars/owasp-cwe078-only.jar
+        build_path: ./owasp-benchmark/by_cwe_jars/cwe078
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
@@ -132,7 +132,7 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./owasp-benchmark/by_cwe_jars/owasp-cwe079-only.jar
+        build_path: ./owasp-benchmark/by_cwe_jars/cwe079
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
