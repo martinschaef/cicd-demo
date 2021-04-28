@@ -63,7 +63,23 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./owasp-benchmark/by_cwe_jars # build artifact(s) directory
+        build_path: ./owasp-benchmark/by_cwe_jars/owasp-cwe022-only.jar
+
+    - name: AWS CodeGuru Reviewer
+      uses: ./.github/vijejain/cicd-actions 
+      continue-on-error: true
+      with:          
+        name: cicd-repo-2
+        source_path: ./
+        build_path: ./owasp-benchmark/by_cwe_jars/owasp-cwe078-only.jar
+
+    - name: AWS CodeGuru Reviewer
+      uses: ./.github/vijejain/cicd-actions 
+      continue-on-error: true
+      with:          
+        name: cicd-repo-2
+        source_path: ./
+        build_path: ./owasp-benchmark/by_cwe_jars/owasp-cwe079-only.jar
 
     - name: Upload review result
       continue-on-error: true
