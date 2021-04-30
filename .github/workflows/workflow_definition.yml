@@ -83,8 +83,8 @@ jobs:
         source_path: ./
         build_path: ./by-cwe/cwe022
     - run: |
-        mkdir ./cwe22-findings
-        cp ./*.json ./cwe022-findings/
+        mkdir ./cwe022-findings
+        cp ./*.json ./cwe022-findings
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
@@ -119,8 +119,8 @@ jobs:
         source_path: ./
         build_path: ./by-cwe/cwe078
     - run: |
-        mkdir ./cwe78-findings
-        cp ./*.json ./cwe022-findings/
+        mkdir ./cwe078-findings
+        cp ./*.json ./cwe078-findings
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
