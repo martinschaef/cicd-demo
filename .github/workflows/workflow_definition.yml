@@ -66,9 +66,8 @@ jobs:
           ./by-cwe
           ./.git
         key: ${{ runner.os }}-artifacts
-    - name: Print debug information
-      run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
-      run: echo "Total class files $(find ./by-cwe/cwe022 -type f -name '*.class' | wc -l )"
+    - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
+    - run: echo "Total class files $(find ./by-cwe/cwe022 -type f -name '*.class' | wc -l )"
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
