@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+by-cwe
 
 # Log file
 *.log
