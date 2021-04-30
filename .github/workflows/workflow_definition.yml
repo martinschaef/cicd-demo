@@ -35,7 +35,6 @@ jobs:
         java-version: 1.8
     - name: Build and package
       run: ./create_jars.sh	
-
     - name: Cache source and build files for subsequent jobs
       uses: actions/cache@v2
       with:
@@ -57,6 +56,8 @@ jobs:
           ./by-cwe
           ./.git
         key: ${{ runner.os }}-artifacts
+    - name: List files for debugging
+      run: ls -R by-cwe && ls -R owasp-benchmark/src/
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
       continue-on-error: true
@@ -79,7 +80,7 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./owasp-benchmark/by_cwe_jars/cwe022
+        build_path: ./by-cwe/cwe022
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
@@ -120,7 +121,7 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./owasp-benchmark/by_cwe_jars/cwe078
+        build_path: ./by-cwe/cwe078
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
@@ -160,7 +161,7 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./owasp-benchmark/by_cwe_jars/cwe079
+        build_path: ./by-cwe/cwe079
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
