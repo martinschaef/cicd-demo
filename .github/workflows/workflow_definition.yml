@@ -44,7 +44,8 @@ jobs:
           ./by-cwe
           ./.git
         key: ${{ runner.os }}-artifacts
-        restore-keys: ${{ runner.os }}-artifacts
+        restore-keys: |
+          ${{ runner.os }}-artifacts
 
   cwe22:
     runs-on: ubuntu-latest
@@ -58,7 +59,8 @@ jobs:
           ./by-cwe
           ./.git
         key: ${{ runner.os }}-artifacts
-        restore-keys: ${{ runner.os }}-artifacts
+        restore-keys: |
+          ${{ runner.os }}-artifacts
       - name: Checkout the action from a private repository
       uses: actions/checkout@v2
       continue-on-error: true
@@ -100,7 +102,8 @@ jobs:
           ./by-cwe
           ./.git
         key: ${{ runner.os }}-artifacts
-        restore-keys: ${{ runner.os }}-artifacts        
+        restore-keys: |
+          ${{ runner.os }}-artifacts        
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
       continue-on-error: true
