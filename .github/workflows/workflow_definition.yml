@@ -67,7 +67,7 @@ jobs:
           ./.git
         key: ${{ runner.os }}-artifacts
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
-    - run: echo "Total class files $(find ./by-cwe/cwe022 -type f -name '*.class' | wc -l )"
+    - run: echo "Total jar files $(find ./by-cwe/cwe022 -type f -name '*.jar' | wc -l )"
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -84,7 +84,7 @@ jobs:
         build_path: ./by-cwe/cwe022
     - run: |
         mkdir ./cwe22-findings
-        cp /github/workspace/codeguru-results.json ./cwe022-findings/codeguru-results.json
+        cp ./codeguru-results.json ./cwe022-findings/codeguru-results.json
         cp ./codeguru-results.sarif.json ./cwe022-findings/codeguru-results.sarif.json
     - name: Store Findings
       uses: actions/upload-artifact@v2
@@ -121,7 +121,7 @@ jobs:
         build_path: ./by-cwe/cwe078
     - run: |
         mkdir ./cwe78-findings
-        cp /github/workspace/codeguru-results.json ./cwe078-findings/codeguru-results.json
+        cp ./codeguru-results.json ./cwe078-findings/codeguru-results.json
         cp ./codeguru-results.sarif.json ./cwe078-findings/codeguru-results.sarif.json
     - name: Store Findings
       uses: actions/upload-artifact@v2
