@@ -82,11 +82,15 @@ jobs:
         name: cicd-repo-2
         source_path: ./
         build_path: ./by-cwe/cwe022
+    - run: |
+        mkdir ./cwe22-findings
+        cp /github/workspace/codeguru-results.json ./cwe022-findings/codeguru-results.json
+        cp ./codeguru-results.sarif.json ./cwe022-findings/codeguru-results.sarif.json
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
         name: cwe022_findings
-        path: ./codeguru-results.sarif.json
+        path: ./cwe022-findings
 
   cwe78:
     runs-on: ubuntu-latest
@@ -115,11 +119,15 @@ jobs:
         name: cicd-repo-2
         source_path: ./
         build_path: ./by-cwe/cwe078
+    - run: |
+        mkdir ./cwe78-findings
+        cp /github/workspace/codeguru-results.json ./cwe078-findings/codeguru-results.json
+        cp ./codeguru-results.sarif.json ./cwe078-findings/codeguru-results.sarif.json
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
         name: cwe078_findings
-        path: ./codeguru-results.sarif.json
+        path: ./cwe078-findings
 
   cwe79:
     runs-on: ubuntu-latest
@@ -170,4 +178,4 @@ jobs:
       continue-on-error: true
       uses: github/codeql-action/upload-sarif@v1
       with:
-        sarif_file: codeguru-results.sarif.json
+        sarif_file: ./cwe022-findings/codeguru-results.sarif.json
