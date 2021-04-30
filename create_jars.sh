@@ -26,4 +26,11 @@ for FILE in packaging-hints/*.txt; do
     while read p; do
       cp $OWASP_BUILD_DIR/$p $CWE_DIR/$p
     done < $FILE
+
+    # Now package everything into a Jar because Guru expects a jar file.
+    cd $CWE_DIR
+    jar cf $CWE_NAME.jar ./*
+    rm *.properties
+    rm -r ./org
+    cd -
 done
