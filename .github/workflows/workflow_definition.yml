@@ -58,13 +58,13 @@ jobs:
           ./.git
         key: ${{ runner.os }}-artifacts
     - name: Checkout the action from a private repository
-    uses: actions/checkout@v2
-    continue-on-error: true
-    with:
-      repository: vijejain/cicd-actions
-      ref: refs/heads/main
-      token: ${{ secrets.PAT_TOKEN }}
-      path: ./.github/vijejain/cicd-actions
+      uses: actions/checkout@v2
+      continue-on-error: true
+      with:
+        repository: vijejain/cicd-actions
+        ref: refs/heads/main
+        token: ${{ secrets.PAT_TOKEN }}
+        path: ./.github/vijejain/cicd-actions
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
