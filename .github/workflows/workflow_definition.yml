@@ -63,6 +63,12 @@ jobs:
           - cwe: cwe022
           - cwe: cwe078
           - cwe: cwe079
+          - cwe: cwe089
+          - cwe: cwe090
+          - cwe: cwe327
+          - cwe: cwe328
+          - cwe: cwe614
+          - cwe: cwe643
     steps:
     - name: Cache source and build files for subsequent jobs
       uses: actions/cache@v2
@@ -74,7 +80,7 @@ jobs:
           ./.git
         key: ${{ runner.os }}-artifacts
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
-    - run: echo "Total jar files $(find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar' | wc -l )"
+    - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -107,14 +113,17 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: cwe022_findings
+        path: cwe022-findings
     - name: Download CWE78 Findings 
       uses: actions/download-artifact@v2
       with:
         name: cwe078_findings
+        path: cwe078-findings
     - name: Download CWE79 Findings 
       uses: actions/download-artifact@v2
       with:
         name: cwe079_findings
+        path: cwe079-findings
     - run: find . -type f -name '*.json'
     - name: Upload review result
       continue-on-error: true
