@@ -84,8 +84,7 @@ jobs:
         build_path: ./by-cwe/cwe022
     - run: |
         mkdir ./cwe22-findings
-        cp ./codeguru-results.json ./cwe022-findings/codeguru-results.json
-        cp ./codeguru-results.sarif.json ./cwe022-findings/codeguru-results.sarif.json
+        cp ./*.json ./cwe022-findings/
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
@@ -121,8 +120,7 @@ jobs:
         build_path: ./by-cwe/cwe078
     - run: |
         mkdir ./cwe78-findings
-        cp ./codeguru-results.json ./cwe078-findings/codeguru-results.json
-        cp ./codeguru-results.sarif.json ./cwe078-findings/codeguru-results.sarif.json
+        cp ./*.json ./cwe022-findings/
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
