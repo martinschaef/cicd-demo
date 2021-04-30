@@ -53,9 +53,16 @@ jobs:
           ./.git
         key: ${{ runner.os }}-artifacts
 
-  cwe22:
+
+  cwes:
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      matrix:
+        include:
+          - cwe: cwe022
+          - cwe: cwe078
+          - cwe: cwe079
     steps:
     - name: Cache source and build files for subsequent jobs
       uses: actions/cache@v2
@@ -67,7 +74,7 @@ jobs:
           ./.git
         key: ${{ runner.os }}-artifacts
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
-    - run: echo "Total jar files $(find ./by-cwe/cwe022 -type f -name '*.jar' | wc -l )"
+    - run: echo "Total jar files $(find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar' | wc -l )"
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -81,91 +88,20 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./by-cwe/cwe022
+        build_path: ./by-cwe/${{ matrix.cwe }}
     - run: |
-        mkdir ./cwe022-findings
-        cp ./*.json ./cwe022-findings
+        mkdir ./${{ matrix.cwe }}-findings
+        cp ./*.json ./${{ matrix.cwe }}-findings
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
-        name: cwe022_findings
-        path: ./cwe022-findings
+        name: ${{ matrix.cwe }}_findings
+        path: ./${{ matrix.cwe }}-findings
 
-  cwe78:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    - name: Cache source and build files for subsequent jobs
-      uses: actions/cache@v2
-      with:
-        path: |
-          ./.github/vijejain/        
-          ./owasp-benchmark/src
-          ./by-cwe
-          ./.git
-        key: ${{ runner.os }}-artifacts
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
-
-    - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions 
-      continue-on-error: true
-      with:          
-        name: cicd-repo-2
-        source_path: ./
-        build_path: ./by-cwe/cwe078
-    - run: |
-        mkdir ./cwe078-findings
-        cp ./*.json ./cwe078-findings
-    - name: Store Findings
-      uses: actions/upload-artifact@v2
-      with:
-        name: cwe078_findings
-        path: ./cwe078-findings
-
-  cwe79:
-    runs-on: ubuntu-latest
-    needs: build    
-    steps:
-    - name: Cache source and build files for subsequent jobs
-      uses: actions/cache@v2
-      with:
-        path: |
-          ./.github/vijejain/        
-          ./owasp-benchmark/src
-          ./by-cwe
-          ./.git
-        key: ${{ runner.os }}-artifacts
-
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2    
-    - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions 
-      continue-on-error: true
-      with:          
-        name: cicd-repo-2
-        source_path: ./
-        build_path: ./by-cwe/cwe079
-    - name: Store Findings
-      uses: actions/upload-artifact@v2
-      with:
-        name: cwe079_findings
-        path: ./codeguru-results.sarif.json
-        
   upload_sarif:
     runs-on: ubuntu-latest
     needs: 
-      - cwe22
-      - cwe78
-      - cwe79
+      - cwes
     steps:
     - name: Download CWE22 Findings 
       uses: actions/download-artifact@v2
