@@ -34,17 +34,18 @@ public class AWSCodeGuruReader extends Reader {
 		JSONObject obj = new JSONObject(content);
 		int version = 1; // TODO Need a version string
 
-
-
 		final TestResults testResults =
             new TestResults( "AWS CodeGuru Reviewer" ,true,TestResults.ToolType.SAST);
 
 		testResults.setTime("TODO"); // NEED THE SCAN TIME
 
+        final int hackCWENumber = Integer.parseInt(f.getName().replace(".json", "")); // HACK
+
+
         JSONArray recommendations = obj.getJSONArray("RecommendationSummaries");
 		for (int i = 0; i < recommendations.length(); i++)
 		{
-			TestCaseResult testCaseResult = parseCodeGuruFinding( recommendations.getJSONObject(i), version );
+			TestCaseResult testCaseResult = parseCodeGuruFinding( recommendations.getJSONObject(i), hackCWENumber );
 			if ( testCaseResult != null ) {
                 testResults.put( testCaseResult );
 			}
@@ -54,15 +55,16 @@ public class AWSCodeGuruReader extends Reader {
 	}
 
 
-	private TestCaseResult parseCodeGuruFinding(JSONObject finding, int version) {
+	private TestCaseResult parseCodeGuruFinding(JSONObject finding, int cweNumber) {
 	    try {
             TestCaseResult testCaseResult = new TestCaseResult();
             final String filePath = finding.getString("FilePath");
             if (filePath.contains(BenchmarkScore.BENCHMARKTESTNAME)) {
-                final String benchmarkNumber = filePath.substring( BenchmarkScore.BENCHMARKTESTNAME.length() + 1,
-                                                                   filePath.length() - 5 );
+                final String fileName = new File(filePath).getName();
+                final String benchmarkNumber = fileName.replace(BenchmarkScore.BENCHMARKTESTNAME, "")
+                                                       .replace(".java", "");
                 testCaseResult.setNumber(Integer.parseInt(benchmarkNumber));
-                testCaseResult.setCWE(328); // TODO: HACK
+                testCaseResult.setCWE(cweNumber); // TODO: HACK
                 testCaseResult.setCategory("TODO"); // TODO
                 testCaseResult.setEvidence(finding.getString("Description"));
                 return testCaseResult;
@@ -72,4 +74,6 @@ public class AWSCodeGuruReader extends Reader {
         }
 	    return null;
     }
+
+
 }
