@@ -18,6 +18,8 @@
 
 package org.owasp.benchmark.score;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,10 +46,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.commons.io.FileUtils;
+import org.owasp.benchmark.score.parsers.AWSCodeGuruReader;
 import org.owasp.benchmark.score.parsers.AcunetixReader;
 import org.owasp.benchmark.score.parsers.AppScanDynamicReader;
 import org.owasp.benchmark.score.parsers.AppScanDynamicReader2;
@@ -57,8 +57,8 @@ import org.owasp.benchmark.score.parsers.ArachniReader;
 import org.owasp.benchmark.score.parsers.BurpReader;
 import org.owasp.benchmark.score.parsers.CASTAIPReader;
 import org.owasp.benchmark.score.parsers.CheckmarxESReader;
-import org.owasp.benchmark.score.parsers.CheckmarxReader;
 import org.owasp.benchmark.score.parsers.CheckmarxIASTReader;
+import org.owasp.benchmark.score.parsers.CheckmarxReader;
 import org.owasp.benchmark.score.parsers.ContrastReader;
 import org.owasp.benchmark.score.parsers.Counter;
 import org.owasp.benchmark.score.parsers.CoverityReader;
@@ -75,8 +75,8 @@ import org.owasp.benchmark.score.parsers.NetsparkerReader;
 import org.owasp.benchmark.score.parsers.NoisyCricketReader;
 import org.owasp.benchmark.score.parsers.OverallResult;
 import org.owasp.benchmark.score.parsers.OverallResults;
-import org.owasp.benchmark.score.parsers.ParasoftReader;
 import org.owasp.benchmark.score.parsers.PMDReader;
+import org.owasp.benchmark.score.parsers.ParasoftReader;
 import org.owasp.benchmark.score.parsers.QualysWASReader;
 import org.owasp.benchmark.score.parsers.Rapid7Reader;
 import org.owasp.benchmark.score.parsers.Reader;
@@ -666,8 +666,11 @@ public class BenchmarkScore {
 			if ( line2.contains("Coverity") || line2.contains("formatVersion") ) {
 				tr = new CoverityReader().parse( fileToParse );
 			} else if ( line2.contains("Vendor") && line2.contains("Checkmarx") ) {
-				tr = new CheckmarxESReader().parse( fileToParse );
-			} else System.out.println("Error: No matching parser found for JSON file: " + filename);
+                tr = new CheckmarxESReader().parse(fileToParse);
+//			} else {System.out.println("Error: No matching parser found for JSON file: " + filename);}
+            } else {
+			    tr = new AWSCodeGuruReader().parse(fileToParse);
+            }
 		}
 
 		else if ( filename.endsWith( ".sarif" ) ) {
