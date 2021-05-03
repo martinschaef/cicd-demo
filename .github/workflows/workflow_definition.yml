@@ -35,6 +35,14 @@ jobs:
         java-version: 1.8
     - name: Build and package
       run: ./create_jars.sh	
+    - name: Checkout the action from a private repository
+      uses: actions/checkout@v2
+      continue-on-error: true
+      with:
+        repository: vijejain/cicd-actions
+        ref: refs/heads/main
+        token: ${{ secrets.PAT_TOKEN }}
+        path: ./.github/vijejain/cicd-actions
     - name: Cache source and build files for subsequent jobs
       uses: actions/cache@v2
       with:
@@ -42,6 +50,7 @@ jobs:
           ./owasp-benchmark/src
           ./by-cwe
           ./.git
+          ./.github/vijejain 
         key: ${{ runner.os }}-artifacts
 
 
@@ -61,14 +70,6 @@ jobs:
           - cwe: cwe614
           - cwe: cwe643
     steps:
-    - name: Checkout the action from a private repository
-      uses: actions/checkout@v2
-      continue-on-error: true
-      with:
-        repository: vijejain/cicd-actions
-        ref: refs/heads/main
-        token: ${{ secrets.PAT_TOKEN }}
-        path: ./.github/vijejain/cicd-actions
     - name: Cache source and build files for subsequent jobs
       uses: actions/cache@v2
       with:
@@ -76,6 +77,7 @@ jobs:
           ./owasp-benchmark/src
           ./by-cwe
           ./.git
+          ./.github/vijejain
         key: ${{ runner.os }}-artifacts
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
     - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
