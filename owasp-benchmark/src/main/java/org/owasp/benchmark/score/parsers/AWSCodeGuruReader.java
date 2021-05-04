@@ -39,13 +39,10 @@ public class AWSCodeGuruReader extends Reader {
 
 		testResults.setTime("TODO"); // NEED THE SCAN TIME
 
-        final int hackCWENumber = Integer.parseInt(f.getName().replace(".json", "")); // HACK
-
-
         JSONArray recommendations = obj.getJSONArray("RecommendationSummaries");
 		for (int i = 0; i < recommendations.length(); i++)
 		{
-			TestCaseResult testCaseResult = parseCodeGuruFinding( recommendations.getJSONObject(i), hackCWENumber );
+			TestCaseResult testCaseResult = parseCodeGuruFinding( recommendations.getJSONObject(i), 1 );
 			if ( testCaseResult != null ) {
                 testResults.put( testCaseResult );
 			}
@@ -55,7 +52,7 @@ public class AWSCodeGuruReader extends Reader {
 	}
 
 
-	private TestCaseResult parseCodeGuruFinding(JSONObject finding, int cweNumber) {
+	private TestCaseResult parseCodeGuruFinding(JSONObject finding, int version) {
 	    try {
             TestCaseResult testCaseResult = new TestCaseResult();
             final String filePath = finding.getString("FilePath");
@@ -64,15 +61,27 @@ public class AWSCodeGuruReader extends Reader {
                 final String benchmarkNumber = fileName.replace(BenchmarkScore.BENCHMARKTESTNAME, "")
                                                        .replace(".java", "");
                 testCaseResult.setNumber(Integer.parseInt(benchmarkNumber));
-                testCaseResult.setCWE(cweNumber); // TODO: HACK
                 testCaseResult.setCategory("TODO"); // TODO
                 testCaseResult.setEvidence(finding.getString("Description"));
+                int cweNumber = hackCWENumber(testCaseResult.getEvidence());
+                testCaseResult.setCWE(cweNumber); // TODO: HACK
+                System.err.println("Found CWE " + testCaseResult.getCWE() + " in benchmark " + testCaseResult.getNumber() );
                 return testCaseResult;
             }
         }  catch (Exception e ) {
             e.printStackTrace();
         }
 	    return null;
+    }
+
+    private int hackCWENumber(final String evidence) {
+	    if (evidence.contains("Potentially untrusted inputs")) return 22;
+	    if (evidence.contains("It looks like your code uses a cipher")) return 327;
+	    if (evidence.contains("This hashing algorithm might")) return 328;
+	    if (evidence.contains("We detected an Xpath query that might use unsanitized input")) return 643;
+	    if (evidence.contains("Your code grants file permissions to all users of the system")) return 732;
+	    System.err.println("Unknown evidence " + evidence);
+	    return 0;
     }
 
 
