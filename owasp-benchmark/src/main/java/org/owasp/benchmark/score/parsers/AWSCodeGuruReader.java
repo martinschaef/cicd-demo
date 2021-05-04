@@ -76,7 +76,17 @@ public class AWSCodeGuruReader extends Reader {
 
     private int hackCWENumber(final String evidence) {
 	    if (evidence.contains("Potentially untrusted inputs")) return 22;
-	    
+
+        if (evidence.contains("It looks like your code is constructing an OS command using")) return 78;
+        if (evidence.contains("Potentially untrusted inputs reach a method on a [`javax.servlet.http.HttpServletResponse")) return 78;
+        if (evidence.contains("It looks like you are using the `DefaultHttpHeaders` constructor with validation disabled")) return 78;
+
+        if (evidence.contains("Potentially untrusted inputs are used to create a [`javax.servlet.http.Cookie")) return 79;
+
+        if (evidence.contains("We detected an SQL command that might")) return 89;
+
+        if (evidence.contains("We detected an LDAP search that might use unsanitized input in the search string")) return 90;
+
 	    if (evidence.contains("It looks like your code uses a cipher")) return 327;
         if (evidence.contains("This code uses an algorithm to instantiate the `KeyGenerator` that is insecure")) return 327;
         if (evidence.contains("We detected an insecure use of the [`javax.crypto.KeyGenerator")) return 327;
@@ -97,10 +107,12 @@ public class AWSCodeGuruReader extends Reader {
         if (evidence.contains("This Message Authentication Code (MAC) uses a weak algorithm which might lead to cryptographic vulnerabilities")) return 327;
         if (evidence.contains("We have detected that you are using some TLS cipher")) return 327;
 
-
-
 	    if (evidence.contains("This hashing algorithm might be insecure")) return 328;
-	    if (evidence.contains("We detected an Xpath query that might use unsanitized input")) return 643;
+
+        if (evidence.contains("We detected the use of cookies which are not secure")) return 614;
+
+        if (evidence.contains("We detected an Xpath query that might use unsanitized input")) return 643;
+
 	    if (evidence.contains("Your code grants file permissions to all users of the system")) return 732;
 	    if (evidence.contains("We detected an insecure use of the")) return 0;
 	    System.err.println("Unknown evidence " + evidence);
