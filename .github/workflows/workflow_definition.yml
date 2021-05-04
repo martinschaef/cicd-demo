@@ -173,6 +173,15 @@ jobs:
       with:
         name: scorecard
         path: ./owasp-benchmark/scorecard
+    - name: "Copy scorecard"
+      run: | 
+        cp -r ./owasp-benchmark/scorecard ./html
+        cp html/Benchmark_v1.2_Scorecard_for_AWS_CodeGuru_Reviewer.html html/index.html
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@4.1.1
+      with:
+        branch: gh-pages # The branch the action should deploy to.
+        folder: html # The folder the action should deploy.
     - run: find . -type f -name '*.json'
     - name: Upload review result
       continue-on-error: true
