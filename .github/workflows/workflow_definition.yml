@@ -47,10 +47,11 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |    
-          ./owasp-benchmark/src
+          ./owasp-benchmark
           ./by-cwe
           ./.git
           ./.github/vijejain 
+          ./createScorecard.sh
         key: ${{ runner.os }}-artifacts
 
 
@@ -74,10 +75,11 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          ./owasp-benchmark/src
+          ./owasp-benchmark
           ./by-cwe
           ./.git
           ./.github/vijejain
+          ./createScorecard.sh
         key: ${{ runner.os }}-artifacts
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
     - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
@@ -109,6 +111,16 @@ jobs:
     needs: 
       - cwes
     steps:
+    - name: Cache source and build files for subsequent jobs
+      uses: actions/cache@v2
+      with:
+        path: |
+          ./owasp-benchmark
+          ./by-cwe
+          ./.git
+          ./.github/vijejain
+          ./createScorecard.sh
+        key: ${{ runner.os }}-artifacts      
     - name: Download CWE22 Findings 
       uses: actions/download-artifact@v2
       with:
@@ -124,6 +136,43 @@ jobs:
       with:
         name: cwe079_findings
         path: cwe079_findings
+    - name: Download CWE90 Findings 
+      uses: actions/download-artifact@v2
+      with:
+        name: cwe090_findings
+        path: cwe090_findings
+    - name: Download CWE89 Findings 
+      uses: actions/download-artifact@v2
+      with:
+        name: cwe089_findings
+        path: cwe089_findings
+    - name: Download CWE327 Findings 
+      uses: actions/download-artifact@v2
+      with:
+        name: cwe327_findings
+        path: cwe327_findings
+    - name: Download CWE328 Findings 
+      uses: actions/download-artifact@v2
+      with:
+        name: cwe328_findings
+        path: cwe328_findings
+    - name: Download CWE614 Findings 
+      uses: actions/download-artifact@v2
+      with:
+        name: cwe614_findings
+        path: cwe614_findings
+    - name: Download CWE643 Findings 
+      uses: actions/download-artifact@v2
+      with:
+        name: cwe643_findings
+        path: cwe643_findings
+    - name: "Create Scorecard"
+      run: ./createScorecard.sh
+    - name: Store Findings
+      uses: actions/upload-artifact@v2
+      with:
+        name: scorecard
+        path: ./owasp-benchmark/scorecard
     - run: find . -type f -name '*.json'
     - name: Upload review result
       continue-on-error: true

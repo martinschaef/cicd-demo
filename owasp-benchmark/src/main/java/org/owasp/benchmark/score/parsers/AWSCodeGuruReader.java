@@ -76,10 +76,33 @@ public class AWSCodeGuruReader extends Reader {
 
     private int hackCWENumber(final String evidence) {
 	    if (evidence.contains("Potentially untrusted inputs")) return 22;
+	    
 	    if (evidence.contains("It looks like your code uses a cipher")) return 327;
-	    if (evidence.contains("This hashing algorithm might")) return 328;
+        if (evidence.contains("This code uses an algorithm to instantiate the `KeyGenerator` that is insecure")) return 327;
+        if (evidence.contains("We detected an insecure use of the [`javax.crypto.KeyGenerator")) return 327;
+        if (evidence.contains("It looks like your code uses a cipher object with an insecure transformation")) return 327;
+        if (evidence.contains("This code uses an algorithm to instantiate the `KeyGenerator` that is insecure")) return 327;
+        if (evidence.contains("An instance of [`java.security.KeyPairGenerator`]")) return 327;
+        if (evidence.contains("An insecure cryptographic algorithm is used with [`java.security.KeyPairGenerator`]")) return 327;
+        if (evidence.contains("An insecure or incompatible key size is used with [`java.security.KeyPairGenerator`](")) return 327;
+        if (evidence.contains("An instance of [`java.security.KeyPairGenerator`]")) return 327;
+        if (evidence.contains("It looks like a password might be stored in memory using clear text")) return 327;
+        if (evidence.contains("We detected an insecure use of the `javax.crypto.SecretKeyFactory`")) return 327;
+        if (evidence.contains("The `Signature` uses a weak cryptographic")) return 327;
+        if (evidence.contains("A `Signature` was created, but it was not initialized")) return 327;
+        if (evidence.contains("The `Signature` was updated with data before it was initialized")) return 327;
+        if (evidence.contains("A `Signature` instance was initialized")) return 327;
+        if (evidence.contains("This code seems to implement a symmetric key exchange")) return 327;
+        if (evidence.contains("We detected the use of weak cryptographic primitives whic")) return 327;
+        if (evidence.contains("This Message Authentication Code (MAC) uses a weak algorithm which might lead to cryptographic vulnerabilities")) return 327;
+        if (evidence.contains("We have detected that you are using some TLS cipher")) return 327;
+
+
+
+	    if (evidence.contains("This hashing algorithm might be insecure")) return 328;
 	    if (evidence.contains("We detected an Xpath query that might use unsanitized input")) return 643;
 	    if (evidence.contains("Your code grants file permissions to all users of the system")) return 732;
+	    if (evidence.contains("We detected an insecure use of the")) return 0;
 	    System.err.println("Unknown evidence " + evidence);
 	    return 0;
     }
