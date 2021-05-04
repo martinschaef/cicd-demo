@@ -81,7 +81,7 @@ public class AWSCodeGuruReader extends Reader {
         if (evidence.contains("Potentially untrusted inputs reach a method on a [`javax.servlet.http.HttpServletResponse")) return 78;
         if (evidence.contains("It looks like you are using the `DefaultHttpHeaders` constructor with validation disabled")) return 78;
 
-        if (evidence.contains("Potentially untrusted inputs are used to create a [`javax.servlet.http.Cookie")) return 79;
+        if (evidence.contains("Potentially untrusted inputs reach a method on")) return 79;
 
         if (evidence.contains("We detected an SQL command that might")) return 89;
 
