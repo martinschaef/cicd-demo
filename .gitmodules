@@ -1,0 +1,3 @@
+[submodule "owasp-benchmark"]
+	path = owasp-benchmark
+	url = https://github.com/OWASP/Benchmark.git
