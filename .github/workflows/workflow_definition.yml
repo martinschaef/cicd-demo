@@ -52,7 +52,7 @@ jobs:
           ./.git
           ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-artifacts
+        key: ${{ runner.os }}-assets
     - name: Store jars
       uses: actions/upload-artifact@v2
       with:
@@ -78,13 +78,13 @@ jobs:
     - name: Cache source and build files for subsequent jobs
       uses: actions/cache@v2
       with:
-        path: |
+        path: |    
           ./owasp-benchmark
           ./by-cwe
           ./.git
-          ./.github/vijejain
+          ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-artifacts
+        key: ${{ runner.os }}-assets
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
     - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
     - name: Configure AWS Credentials
@@ -122,13 +122,13 @@ jobs:
     - name: Cache source and build files for subsequent jobs
       uses: actions/cache@v2
       with:
-        path: |
+        path: |    
           ./owasp-benchmark
           ./by-cwe
           ./.git
-          ./.github/vijejain
+          ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-artifacts      
+        key: ${{ runner.os }}-assets    
     - name: Download CWE22 Findings 
       uses: actions/download-artifact@v2
       with:
