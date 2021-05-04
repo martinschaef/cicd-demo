@@ -53,7 +53,11 @@ jobs:
           ./.github/vijejain 
           ./createScorecard.sh
         key: ${{ runner.os }}-artifacts
-
+    - name: Store jars
+      uses: actions/upload-artifact@v2
+      with:
+        name: analyzed_jars
+        path: ./by-cwe
 
   cwes:
     runs-on: ubuntu-latest
