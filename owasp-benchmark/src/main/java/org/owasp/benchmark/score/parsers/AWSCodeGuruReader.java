@@ -21,6 +21,8 @@ package org.owasp.benchmark.score.parsers;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,11 +58,24 @@ public class AWSCodeGuruReader extends Reader {
 	    try {
             TestCaseResult testCaseResult = new TestCaseResult();
             final String filePath = finding.getString("FilePath");
+            int benchmarkNumber = 0;
             if (filePath.contains(BenchmarkScore.BENCHMARKTESTNAME)) {
                 final String fileName = new File(filePath).getName();
-                final String benchmarkNumber = fileName.replace(BenchmarkScore.BENCHMARKTESTNAME, "")
+                final String benchmarkNumString = fileName.replace(BenchmarkScore.BENCHMARKTESTNAME, "")
                                                        .substring(0, 5);
-                testCaseResult.setNumber(Integer.parseInt(benchmarkNumber));
+                benchmarkNumber = Integer.parseInt(benchmarkNumString);
+            } else {
+                Pattern p = Pattern.compile("Benchmark\\d{5}");
+                Matcher m = p.matcher(finding.getString("Description"));
+                while (m.find()) {
+                    final String benchmarkNumString = m.group().replace(BenchmarkScore.BENCHMARKTESTNAME, "");
+                    benchmarkNumber = Integer.parseInt(benchmarkNumString);
+                    break;
+                }
+            }
+
+            if (benchmarkNumber > 0) {
+                testCaseResult.setNumber(benchmarkNumber);
                 testCaseResult.setCategory("TODO"); // TODO
                 testCaseResult.setEvidence(finding.getString("Description"));
                 int cweNumber = hackCWENumber(testCaseResult.getEvidence());
@@ -75,13 +90,13 @@ public class AWSCodeGuruReader extends Reader {
     }
 
     private int hackCWENumber(final String evidence) {
-	    if (evidence.contains("Potentially untrusted inputs")) return 22;
+	    if (evidence.contains("Potentially untrusted inputs are used to access a file path")) return 22;
 
         if (evidence.contains("It looks like your code is constructing an OS command using")) return 78;
-        if (evidence.contains("Potentially untrusted inputs reach a method on a [`javax.servlet.http.HttpServletResponse")) return 78;
-        if (evidence.contains("It looks like you are using the `DefaultHttpHeaders` constructor with validation disabled")) return 78;
-
-        if (evidence.contains("Potentially untrusted inputs reach a method on")) return 79;
+        
+        if (evidence.contains("Potentially untrusted inputs reach a method on a [`javax.servlet.http.HttpServletResponse")) return 79;
+        if (evidence.contains("It looks like you are using the `DefaultHttpHeaders` constructor with validation disabled")) return 79;
+        if (evidence.contains("Potentially untrusted inputs are used to create a [`javax.servlet.http.Cookie`]")) return 79;
 
         if (evidence.contains("We detected an SQL command that might")) return 89;
 
