@@ -50,6 +50,7 @@ jobs:
           ./owasp-benchmark/src
           ./owasp-benchmark/scorecard
           ./owasp-benchmark/createScorecards.sh
+          ./owasp-benchmark/expectedresults-1.2.csv
           ./by-cwe
           ./.git
           ./.github/vijejain 
@@ -84,6 +85,7 @@ jobs:
           ./owasp-benchmark/src
           ./owasp-benchmark/scorecard
           ./owasp-benchmark/createScorecards.sh
+          ./owasp-benchmark/expectedresults-1.2.csv
           ./by-cwe
           ./.git
           ./.github/vijejain 
@@ -126,6 +128,7 @@ jobs:
           ./owasp-benchmark/src
           ./owasp-benchmark/scorecard
           ./owasp-benchmark/createScorecards.sh
+          ./owasp-benchmark/expectedresults-1.2.csv
           ./by-cwe
           ./.git
           ./.github/vijejain 
