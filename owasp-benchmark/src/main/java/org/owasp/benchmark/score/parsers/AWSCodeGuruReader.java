@@ -59,7 +59,7 @@ public class AWSCodeGuruReader extends Reader {
             if (filePath.contains(BenchmarkScore.BENCHMARKTESTNAME)) {
                 final String fileName = new File(filePath).getName();
                 final String benchmarkNumber = fileName.replace(BenchmarkScore.BENCHMARKTESTNAME, "")
-                                                       .replace(".java", "");
+                                                       .substring(0, 5);
                 testCaseResult.setNumber(Integer.parseInt(benchmarkNumber));
                 testCaseResult.setCategory("TODO"); // TODO
                 testCaseResult.setEvidence(finding.getString("Description"));

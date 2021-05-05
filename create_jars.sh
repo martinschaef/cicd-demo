@@ -24,7 +24,7 @@ for FILE in packaging-hints/*.txt; do
     # copy the classes for each CWE.
     mkdir -p $CWE_DIR/org/owasp/benchmark/testcode
     while read p; do
-      cp $OWASP_BUILD_DIR/$p $CWE_DIR/$p
+      cp $OWASP_BUILD_DIR/$p $CWE_DIR/
     done < $FILE
 
     # Now package everything into a Jar because Guru expects a jar file.
