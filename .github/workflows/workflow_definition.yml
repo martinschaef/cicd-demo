@@ -56,7 +56,7 @@ jobs:
           ./.git
           ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-data2
+        key: ${{ runner.os }}-data3
     - name: Store jars
       uses: actions/upload-artifact@v2
       with:
@@ -92,7 +92,7 @@ jobs:
           ./.git
           ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-data2
+        key: ${{ runner.os }}-data3
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
     - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
     - name: Configure AWS Credentials
