@@ -17,7 +17,7 @@ on:
       logLevel:
         description: 'Log level'     
         required: true
-        default: 'warning'
+        default: 'info'
       tags:
         description: 'Test scenario tags'  
 
@@ -52,7 +52,7 @@ jobs:
           ./.git
           ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-assets
+        key: ${{ runner.os }}-data
     - name: Store jars
       uses: actions/upload-artifact@v2
       with:
@@ -84,7 +84,7 @@ jobs:
           ./.git
           ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-assets
+        key: ${{ runner.os }}-data
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
     - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
     - name: Configure AWS Credentials
@@ -115,10 +115,6 @@ jobs:
     needs: 
       - cwes
     steps:
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
     - name: Cache source and build files for subsequent jobs
       uses: actions/cache@v2
       with:
@@ -128,7 +124,11 @@ jobs:
           ./.git
           ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-assets    
+        key: ${{ runner.os }}-data      
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8 
     - name: Download CWE22 Findings 
       uses: actions/download-artifact@v2
       with:
