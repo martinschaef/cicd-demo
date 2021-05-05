@@ -56,7 +56,7 @@ jobs:
           ./.git
           ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-data
+        key: ${{ runner.os }}-data2
     - name: Store jars
       uses: actions/upload-artifact@v2
       with:
@@ -92,7 +92,7 @@ jobs:
           ./.git
           ./.github/vijejain 
           ./createScorecard.sh
-        key: ${{ runner.os }}-data
+        key: ${{ runner.os }}-data2
     - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
     - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
     - name: Configure AWS Credentials
@@ -123,20 +123,9 @@ jobs:
     needs: 
       - cwes
     steps:
-    - name: Cache source and build files for subsequent jobs
-      uses: actions/cache@v2
+    - uses: actions/checkout@v2
       with:
-        path: |    
-          ./owasp-benchmark/src
-          ./owasp-benchmark/pom.xml
-          ./owasp-benchmark/scorecard
-          ./owasp-benchmark/createScorecards.sh
-          ./owasp-benchmark/expectedresults-1.2.csv
-          ./by-cwe
-          ./.git
-          ./.github/vijejain 
-          ./createScorecard.sh
-        key: ${{ runner.os }}-data      
+        fetch-depth: 0          
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
