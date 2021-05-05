@@ -48,6 +48,7 @@ jobs:
       with:
         path: |    
           ./owasp-benchmark/src
+          ./owasp-benchmark/pom.xml
           ./owasp-benchmark/scorecard
           ./owasp-benchmark/createScorecards.sh
           ./owasp-benchmark/expectedresults-1.2.csv
@@ -83,6 +84,7 @@ jobs:
       with:
         path: |    
           ./owasp-benchmark/src
+          ./owasp-benchmark/pom.xml
           ./owasp-benchmark/scorecard
           ./owasp-benchmark/createScorecards.sh
           ./owasp-benchmark/expectedresults-1.2.csv
@@ -126,6 +128,7 @@ jobs:
       with:
         path: |    
           ./owasp-benchmark/src
+          ./owasp-benchmark/pom.xml
           ./owasp-benchmark/scorecard
           ./owasp-benchmark/createScorecards.sh
           ./owasp-benchmark/expectedresults-1.2.csv
