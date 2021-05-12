@@ -56,22 +56,12 @@ jobs:
           - cwe: cwe614
           - cwe: cwe643
     steps:
-    - name: Download all aritfacts
-      uses: actions/download-artifact@v2
-      with:
-        name: analyzed_jars
-        path: ./analyzed_jars
+
     - name: Checkout the code and submodules
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
         submodules: 'true'
-
-    - name: Cached Jars 1
-      run: |        
-        ls -R ./analyzed_jars
-      working-directory: ./      
-
 
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
@@ -88,6 +78,11 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
 
+    - name: Download all aritfacts
+      uses: actions/download-artifact@v2
+      with:
+        name: analyzed_jars
+        path: ./analyzed_jars
     - name: Cached Jars 2
       run: |        
         ls -R ./analyzed_jars
