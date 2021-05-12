@@ -65,7 +65,7 @@ jobs:
       with:
         path: ./
     - name: Cached Jars
-      run: ls -R ./by-cwe
+      run: ls -R ./analyzed_jars
       working-directory: ./          
     - name: Checkout the code and submodules
       uses: actions/checkout@v2
@@ -88,13 +88,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2     
         
-    - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions 
-      continue-on-error: true
-      with:          
-        name: cicd-repo-2
-        source_path: ./
-        build_path: ./by-cwe/${{ matrix.cwe }}
+    # - name: AWS CodeGuru Reviewer
+    #   uses: ./.github/vijejain/cicd-actions 
+    #   continue-on-error: true
+    #   with:          
+    #     name: cicd-repo-2
+    #     source_path: ./
+    #     build_path: ./by-cwe/${{ matrix.cwe }}
     - run: |
         mkdir ./${{ matrix.cwe }}_findings
         cp ./*.json ./${{ matrix.cwe }}_findings || true
