@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Java CI with Maven
+name: Run CodeGuru on OWASP Benchmark
 
 on:
   push:
@@ -22,8 +19,8 @@ on:
         description: 'Test scenario tags'  
 
 jobs:
-
   build:
+    name: Build and cache OWASP Jars
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -43,8 +40,8 @@ jobs:
           ./by-cwe
         key: ${{ runner.os }}-jars
 
-
   cwes:
+    name: Analyze Jar files
     runs-on: ubuntu-latest
     needs: build
     strategy:
@@ -90,13 +87,13 @@ jobs:
       with:
         fetch-depth: 0
         submodules: 'true'
-    # - name: AWS CodeGuru Reviewer
-    #   uses: ./.github/vijejain/cicd-actions 
-    #   continue-on-error: true
-    #   with:          
-    #     name: cicd-repo-2
-    #     source_path: ./
-    #     build_path: ./by-cwe/${{ matrix.cwe }}
+    - name: AWS CodeGuru Reviewer
+      uses: ./.github/vijejain/cicd-actions 
+      continue-on-error: true
+      with:          
+        name: cicd-repo-2
+        source_path: ./
+        build_path: ./by-cwe/${{ matrix.cwe }}
     - run: |
         mkdir ./${{ matrix.cwe }}_findings
         cp ./*.json ./${{ matrix.cwe }}_findings || true
@@ -107,6 +104,7 @@ jobs:
         path: ./${{ matrix.cwe }}_findings
 
   upload_sarif:
+    name: Merge findings for all Jars and create Scorecard
     runs-on: ubuntu-latest
     needs: 
       - cwes
