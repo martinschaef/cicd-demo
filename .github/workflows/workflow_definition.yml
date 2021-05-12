@@ -64,6 +64,7 @@ jobs:
       uses: actions/download-artifact@v2
       id: download
       with:
+        name: analyzed_jars
         path: ./
     - name: Cached Jars
       run: |
@@ -91,13 +92,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2     
         
-    - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions 
-      continue-on-error: true
-      with:          
-        name: cicd-repo-2
-        source_path: ./
-        build_path: ${{steps.download.outputs.download-path}}/${{ matrix.cwe }}
+    # - name: AWS CodeGuru Reviewer
+    #   uses: ./.github/vijejain/cicd-actions 
+    #   continue-on-error: true
+    #   with:          
+    #     name: cicd-repo-2
+    #     source_path: ./
+    #     build_path: ${{steps.download.outputs.download-path}}/${{ matrix.cwe }}
     - run: |
         mkdir ./${{ matrix.cwe }}_findings
         cp ./*.json ./${{ matrix.cwe }}_findings || true
