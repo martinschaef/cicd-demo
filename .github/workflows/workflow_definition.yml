@@ -55,12 +55,16 @@ jobs:
           - cwe: cwe328
           - cwe: cwe614
           - cwe: cwe643
-    steps:        
-    - name: Checkout the code and submodules
-      uses: actions/checkout@v2
+    steps:
+    - name: Download all aritfacts
+      uses: actions/download-artifact@v2
       with:
-        fetch-depth: 0
-        submodules: 'true'
+        name: analyzed_jars
+        path: ./analyzed_jars
+    - name: Cached Jars
+      run: |        
+        ls -R ./analyzed_jars
+      working-directory: ./      
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
       continue-on-error: true
@@ -69,6 +73,11 @@ jobs:
         ref: refs/heads/main
         token: ${{ secrets.PAT_TOKEN }}
         path: ./.github/vijejain/cicd-actions
+    - name: Checkout the code and submodules
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: 'true'
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -81,15 +90,7 @@ jobs:
       with:
         fetch-depth: 0
         submodules: 'true'    
-    - name: Download all aritfacts
-      uses: actions/download-artifact@v2
-      with:
-        name: analyzed_jars
-        path: ./analyzed_jars
-    - name: Cached Jars
-      run: |        
-        ls -R ./analyzed_jars
-      working-directory: ./  
+
 
     - name: AWS CodeGuru Reviewer
       uses: ./.github/vijejain/cicd-actions 
