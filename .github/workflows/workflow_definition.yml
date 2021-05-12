@@ -17,7 +17,7 @@ on:
       logLevel:
         description: 'Log level'     
         required: true
-        default: 'warning'
+        default: 'info'
       tags:
         description: 'Test scenario tags'  
 
@@ -29,30 +29,19 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - run: git submodule update --init --recursive
+        submodules: 'true'
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
     - name: Build and package
       run: ./create_jars.sh	
-    - name: Checkout the action from a private repository
-      uses: actions/checkout@v2
-      continue-on-error: true
-      with:
-        repository: vijejain/cicd-actions
-        ref: refs/heads/main
-        token: ${{ secrets.PAT_TOKEN }}
-        path: ./.github/vijejain/cicd-actions
-    - name: Cache source and build files for subsequent jobs
+    - name: Cache build artifacts
       uses: actions/cache@v2
       with:
         path: |    
-          ./owasp-benchmark/src
           ./by-cwe
-          ./.git
-          ./.github/vijejain 
-        key: ${{ runner.os }}-artifacts
+        key: ${{ runner.os }}-jars
 
 
   cwes:
@@ -71,34 +60,46 @@ jobs:
           - cwe: cwe614
           - cwe: cwe643
     steps:
-    - name: Cache source and build files for subsequent jobs
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: 'true'    
+    - name: Fetch build artifacts
       uses: actions/cache@v2
       with:
-        path: |
-          ./owasp-benchmark/src
+        path: |    
           ./by-cwe
-          ./.git
-          ./.github/vijejain
-        key: ${{ runner.os }}-artifacts
-    - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
-    - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
+        key: ${{ runner.os }}-jars
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
-
-    - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions 
+        aws-region: us-west-2        
+    - name: Checkout the action from a private repository
+      uses: actions/checkout@v2
       continue-on-error: true
-      with:          
-        name: cicd-repo-2
-        source_path: ./
-        build_path: ./by-cwe/${{ matrix.cwe }}
+      with:
+        repository: vijejain/cicd-actions
+        ref: refs/heads/main
+        token: ${{ secrets.PAT_TOKEN }}
+        path: ./.github/vijejain/cicd-actions
+    - name: Checkout the code and submodules
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: 'true'
+    # - name: AWS CodeGuru Reviewer
+    #   uses: ./.github/vijejain/cicd-actions 
+    #   continue-on-error: true
+    #   with:          
+    #     name: cicd-repo-2
+    #     source_path: ./
+    #     build_path: ./by-cwe/${{ matrix.cwe }}
     - run: |
         mkdir ./${{ matrix.cwe }}_findings
-        cp ./*.json ./${{ matrix.cwe }}_findings
+        cp ./*.json ./${{ matrix.cwe }}_findings || true
     - name: Store Findings
       uses: actions/upload-artifact@v2
       with:
@@ -110,22 +111,36 @@ jobs:
     needs: 
       - cwes
     steps:
-    - name: Download CWE22 Findings 
+    - name: Download all aritfacts
       uses: actions/download-artifact@v2
       with:
-        name: cwe022_findings
-        path: cwe022_findings
-    - name: Download CWE78 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe078_findings
-        path: cwe078_findings
-    - name: Download CWE79 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe079_findings
-        path: cwe079_findings
+        path: ./
+        
+    - name: Display structure of downloaded files
+      run: ls -R cwe*
+      working-directory: ./
+     
     - run: find . -type f -name '*.json'
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: 'true'
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: "Create Scorecard"
+      run: ./createScorecard.sh
+    - name: Store Merged Findings For Debugging
+      uses: actions/upload-artifact@v2
+      with:
+        name: merged_findings
+        path: ./owasp-benchmark/results
+    - name: Store Findings
+      uses: actions/upload-artifact@v2
+      with:
+        name: scorecard
+        path: ./owasp-benchmark/scorecard            
     - name: Upload review result
       continue-on-error: true
       uses: github/codeql-action/upload-sarif@v1
