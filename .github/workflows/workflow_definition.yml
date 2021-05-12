@@ -61,15 +61,18 @@ jobs:
       with:
         name: analyzed_jars
         path: ./analyzed_jars
-    - name: Cached Jars
-      run: |        
-        ls -R ./analyzed_jars
-      working-directory: ./      
     - name: Checkout the code and submodules
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-        submodules: 'true'      
+        submodules: 'true'
+
+    - name: Cached Jars 1
+      run: |        
+        ls -R ./analyzed_jars
+      working-directory: ./      
+
+
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
       continue-on-error: true
@@ -78,20 +81,17 @@ jobs:
         ref: refs/heads/main
         token: ${{ secrets.PAT_TOKEN }}
         path: ./.github/vijejain/cicd-actions
-
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
-     
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        submodules: 'true'    
 
+    - name: Cached Jars 2
+      run: |        
+        ls -R ./analyzed_jars
+      working-directory: ./      
 
     - name: AWS CodeGuru Reviewer
       uses: ./.github/vijejain/cicd-actions 
