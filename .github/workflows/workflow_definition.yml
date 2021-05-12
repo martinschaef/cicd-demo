@@ -32,13 +32,12 @@ jobs:
       with:
         java-version: 1.8
     - name: Build and package
-      run: ./create_jars.sh	
-    - name: Cache build artifacts
-      uses: actions/cache@v2
+      run: ./create_jars.sh
+    - name: Store jars
+      uses: actions/upload-artifact@v2
       with:
-        path: |    
-          ./by-cwe
-        key: ${{ runner.os }}-jars
+        name: analyzed_jars
+        path: ./by-cwe
 
   cwes:
     name: Analyze Jar files
@@ -61,12 +60,10 @@ jobs:
       with:
         fetch-depth: 0
         submodules: 'true'    
-    - name: Fetch build artifacts
-      uses: actions/cache@v2
+    - name: Download all aritfacts
+      uses: actions/download-artifact@v2
       with:
-        path: |    
-          ./by-cwe
-        key: ${{ runner.os }}-jars
+        path: ./
     - name: Cached Jars
       run: ls -R ./by-cwe
       working-directory: ./          
@@ -143,8 +140,8 @@ jobs:
       with:
         name: scorecard
         path: ./owasp-benchmark/scorecard            
-    - name: Upload review result
-      continue-on-error: true
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: ./cwe022_findings/codeguru-results.sarif.json
+    # - name: Upload review result
+    #   continue-on-error: true
+    #   uses: github/codeql-action/upload-sarif@v1
+    #   with:
+    #     sarif_file: ./cwe022_findings/codeguru-results.sarif.json
