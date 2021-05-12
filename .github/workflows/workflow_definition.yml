@@ -66,14 +66,12 @@ jobs:
       with:
         path: |    
           ./by-cwe
-        key: ${{ runner.os }}-jars
-
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+        key: ${{ runner.os }}-jars   
+    - name: Checkout the code and submodules
+      uses: actions/checkout@v2
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2        
+        fetch-depth: 0
+        submodules: 'true'
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
       continue-on-error: true
@@ -82,11 +80,14 @@ jobs:
         ref: refs/heads/main
         token: ${{ secrets.PAT_TOKEN }}
         path: ./.github/vijejain/cicd-actions
-    - name: Checkout the code and submodules
-      uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        fetch-depth: 0
-        submodules: 'true'
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2     
+        
     - name: AWS CodeGuru Reviewer
       uses: ./.github/vijejain/cicd-actions 
       continue-on-error: true
