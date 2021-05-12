@@ -59,16 +59,16 @@ public class AWSCodeGuruReader extends Reader {
             TestCaseResult testCaseResult = new TestCaseResult();
             final String filePath = finding.getString("FilePath");
             int benchmarkNumber = 0;
-            if (filePath.contains(BenchmarkScore.BENCHMARKTESTNAME)) {
+            if (filePath.contains(BenchmarkScore.TESTCASENAME)) {
                 final String fileName = new File(filePath).getName();
-                final String benchmarkNumString = fileName.replace(BenchmarkScore.BENCHMARKTESTNAME, "")
+                final String benchmarkNumString = fileName.replace(BenchmarkScore.TESTCASENAME, "")
                                                        .substring(0, 5);
                 benchmarkNumber = Integer.parseInt(benchmarkNumString);
             } else {
                 Pattern p = Pattern.compile("Benchmark\\d{5}");
                 Matcher m = p.matcher(finding.getString("Description"));
                 while (m.find()) {
-                    final String benchmarkNumString = m.group().replace(BenchmarkScore.BENCHMARKTESTNAME, "");
+                    final String benchmarkNumString = m.group().replace(BenchmarkScore.TESTCASENAME, "");
                     benchmarkNumber = Integer.parseInt(benchmarkNumString);
                     break;
                 }
