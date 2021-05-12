@@ -62,10 +62,13 @@ jobs:
         submodules: 'true'    
     - name: Download all aritfacts
       uses: actions/download-artifact@v2
+      id: download
       with:
         path: ./
     - name: Cached Jars
-      run: ls -R ./analyzed_jars
+      run: |
+        echo ${{steps.download.outputs.download-path}}
+        ls -R ${{steps.download.outputs.download-path}}
       working-directory: ./          
     - name: Checkout the code and submodules
       uses: actions/checkout@v2
@@ -94,7 +97,7 @@ jobs:
       with:          
         name: cicd-repo-2
         source_path: ./
-        build_path: ./analyzed_jars/${{ matrix.cwe }}
+        build_path: ${{steps.download.outputs.download-path}}/${{ matrix.cwe }}
     - run: |
         mkdir ./${{ matrix.cwe }}_findings
         cp ./*.json ./${{ matrix.cwe }}_findings || true
@@ -112,6 +115,7 @@ jobs:
     steps:
     - name: Download all aritfacts
       uses: actions/download-artifact@v2
+      id: download_findings
       with:
         path: ./
         
@@ -119,7 +123,9 @@ jobs:
       run: ls -R cwe*
       working-directory: ./
      
-    - run: find . -type f -name '*.json'
+    - run: |
+        ehco ${{steps.download_findings.outputs.download-path}}
+        find ${{steps.download_findings.outputs.download-path}} -type f -name '*.json'
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
