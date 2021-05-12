@@ -55,22 +55,7 @@ jobs:
           - cwe: cwe328
           - cwe: cwe614
           - cwe: cwe643
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        submodules: 'true'    
-    - name: Download all aritfacts
-      uses: actions/download-artifact@v2
-      id: download
-      with:
-        name: analyzed_jars
-        path: ./
-    - name: Cached Jars
-      run: |
-        echo ${{steps.download.outputs.download-path}}
-        ls -R ${{steps.download.outputs.download-path}}
-      working-directory: ./          
+    steps:        
     - name: Checkout the code and submodules
       uses: actions/checkout@v2
       with:
@@ -90,15 +75,29 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2     
-        
-    # - name: AWS CodeGuru Reviewer
-    #   uses: ./.github/vijejain/cicd-actions 
-    #   continue-on-error: true
-    #   with:          
-    #     name: cicd-repo-2
-    #     source_path: ./
-    #     build_path: ${{steps.download.outputs.download-path}}/${{ matrix.cwe }}
+        aws-region: us-west-2
+     
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: 'true'    
+    - name: Download all aritfacts
+      uses: actions/download-artifact@v2
+      with:
+        name: analyzed_jars
+        path: ./analyzed_jars
+    - name: Cached Jars
+      run: |        
+        ls -R ./analyzed_jars
+      working-directory: ./  
+
+    - name: AWS CodeGuru Reviewer
+      uses: ./.github/vijejain/cicd-actions 
+      continue-on-error: true
+      with:          
+        name: cicd-repo-2
+        source_path: ./
+        build_path: ./analyzed_jars/${{ matrix.cwe }}
     - run: |
         mkdir ./${{ matrix.cwe }}_findings
         cp ./*.json ./${{ matrix.cwe }}_findings || true
