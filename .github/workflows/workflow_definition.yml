@@ -1,13 +1,10 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Java CI with Maven
+name: Run CodeGuru on OWASP Benchmark
 
 on:
   push:
-    branches: [ main ]
+    branches: [ sarif ]
   pull_request:
-    branches: [ main ]
+    branches: [ sarif ]
     types: [opened, closed]
 #   schedule: 
 #     # * is a special character in YAML so you have to quote this string
@@ -22,183 +19,13 @@ on:
         description: 'Test scenario tags'  
 
 jobs:
-
   build:
+    name: Build and cache OWASP Jars
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
-    - name: Build and package
-      run: ./create_jars.sh	
-    - name: Checkout the action from a private repository
-      uses: actions/checkout@v2
-      continue-on-error: true
-      with:
-        repository: vijejain/cicd-actions
-        ref: refs/heads/main
-        token: ${{ secrets.PAT_TOKEN }}
-        path: ./.github/vijejain/cicd-actions
-    - name: Cache source and build files for subsequent jobs
-      uses: actions/cache@v2
-      with:
-        path: |    
-          ./owasp-benchmark/src
-          ./owasp-benchmark/pom.xml
-          ./owasp-benchmark/scorecard
-          ./owasp-benchmark/createScorecards.sh
-          ./owasp-benchmark/expectedresults-1.2.csv
-          ./by-cwe
-          ./.git
-          ./.github/vijejain 
-          ./createScorecard.sh
-        key: ${{ runner.os }}-data3
-    - name: Store jars
-      uses: actions/upload-artifact@v2
-      with:
-        name: analyzed_jars
-        path: ./by-cwe
-
-  cwes:
-    runs-on: ubuntu-latest
-    needs: build
-    strategy:
-      matrix:
-        include:
-          - cwe: cwe022
-          - cwe: cwe078
-          - cwe: cwe079
-          - cwe: cwe089
-          - cwe: cwe090
-          - cwe: cwe327
-          - cwe: cwe328
-          - cwe: cwe614
-          - cwe: cwe643
-    steps:
-    - name: Cache source and build files for subsequent jobs
-      uses: actions/cache@v2
-      with:
-        path: |    
-          ./owasp-benchmark/src
-          ./owasp-benchmark/pom.xml
-          ./owasp-benchmark/scorecard
-          ./owasp-benchmark/createScorecards.sh
-          ./owasp-benchmark/expectedresults-1.2.csv
-          ./by-cwe
-          ./.git
-          ./.github/vijejain 
-          ./createScorecard.sh
-        key: ${{ runner.os }}-data3
-    - run: echo "Total java files $(find owasp-benchmark/src/main/java -type f -name '*.java' | wc -l )"
-    - run: find ./by-cwe/${{ matrix.cwe }} -type f -name '*.jar'
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
-
-    - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions 
-      continue-on-error: true
-      with:          
-        name: cicd-repo-2
-        source_path: ./
-        build_path: ./by-cwe/${{ matrix.cwe }}
-    - run: |
-        mkdir ./${{ matrix.cwe }}_findings
-        cp ./*.json ./${{ matrix.cwe }}_findings
-    - name: Store Findings
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ matrix.cwe }}_findings
-        path: ./${{ matrix.cwe }}_findings
-
-  upload_sarif:
-    runs-on: ubuntu-latest
-    needs: 
-      - cwes
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0          
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8 
-    - name: Download CWE22 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe022_findings
-        path: cwe022_findings
-    - name: Download CWE78 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe078_findings
-        path: cwe078_findings
-    - name: Download CWE79 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe079_findings
-        path: cwe079_findings
-    - name: Download CWE90 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe090_findings
-        path: cwe090_findings
-    - name: Download CWE89 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe089_findings
-        path: cwe089_findings
-    - name: Download CWE327 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe327_findings
-        path: cwe327_findings
-    - name: Download CWE328 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe328_findings
-        path: cwe328_findings
-    - name: Download CWE614 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe614_findings
-        path: cwe614_findings
-    - name: Download CWE643 Findings 
-      uses: actions/download-artifact@v2
-      with:
-        name: cwe643_findings
-        path: cwe643_findings
-    - name: "Create Scorecard"
-      run: ./createScorecard.sh
-    - name: Store Merged Findings For Debugging
-      uses: actions/upload-artifact@v2
-      with:
-        name: merged_findings
-        path: ./owasp-benchmark/results
-    - name: Store Findings
-      uses: actions/upload-artifact@v2
-      with:
-        name: scorecard
-        path: ./owasp-benchmark/scorecard
-    - name: "Copy scorecard"
-      run: | 
-        cp -r ./owasp-benchmark/scorecard ./html
-        cp html/Benchmark_v1.2_Scorecard_for_AWS_CodeGuru_Reviewer.html html/index.html
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@4.1.1
-      with:
-        branch: gh-pages # The branch the action should deploy to.
-        folder: html # The folder the action should deploy.
-    - run: find . -type f -name '*.json'
     - name: Upload review result
       continue-on-error: true
       uses: github/codeql-action/upload-sarif@v1
       with:
-        sarif_file: ./cwe022_findings/codeguru-results.sarif.json
+        sarif_file: ./codeguru-results.sarif.json

@@ -1,1 +1,169 @@
+// 20210518154820
+// https://raw.githubusercontent.com/martinschaef/cicd-demo/format-test/codeguru-results.sarif.json
 
+{
+    "version": "2.1.0",
+    "$schema": "http://json.schemastore.org/sarif-2.1.0-rtm.4",
+    "runs": [
+      {
+        "tool": {
+          "driver": {
+            "name": "CodeGuru Reviewer Security Scanner",
+            "informationUri": "https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/how-codeguru-reviewer-works.html",
+            "rules": [
+              {
+                "id": "security-path-traversal",
+                "name": "Path Traversal",
+                "shortDescription": {
+                  "text": "Potentially untrusted inputs are used to access a file path.",
+                  "markdown": "Potentially untrusted inputs are used to access a file path."
+                },
+                "help": {
+                  "text": "Potentially untrusted inputs are used to access a file path. Verify that these inputs are properly sanitized to protect your code from a path traversal attack. Learn more about path traversal vulnerabilities on https://cwe.mitre.org/data/definitions/22.html and https://owasp.org/www-community/attacks/Path_Traversal.",
+                  "markdown": "Potentially untrusted inputs are used to access a file path. Verify that these inputs are properly sanitized to protect your code from a path traversal attack. Learn more about path traversal vulnerabilities on the [Common Weakness Enumeration website](https://cwe.mitre.org/data/definitions/22.html) and the [Open Web Application Security Project website](https://owasp.org/www-community/attacks/Path_Traversal).\n\n\nRelevant Locations:\n\n* owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00623.java, line: 57 \n\n    * owasp-benchmark/src/main/java/org/owasp/benchmark/helpers/SeparateClassRequest.java, line: 31 (The constant value)\n\n    * owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00623.java, line: 45 (The constant value)\n\n"
+                },
+                "properties": {
+                  "tags": [
+                    "CWE-22",
+                    "OWASP",
+                    "Security"
+                  ]
+                }
+              },
+              {
+                "id": "security-sql-injection",
+                "name": "SQL Injection",
+                "shortDescription": {
+                  "text": "SQL command might use unsanitized input.",
+                  "markdown": "SQL command might use unsanitized input."
+                },
+                "help": {
+                  "text": "We detected an SQL command that might use unsanitized input. This can result in an LDAP injection. To increase the security of your code, sanitize inputs before using them. Learn more at https://cwe.mitre.org/data/definitions/90.html.",
+                  "markdown": "We detected an SQL command that might use unsanitized input. This can result in an LDAP injection. To increase the security of your code, sanitize inputs before using them. [Learn more](https://cwe.mitre.org/data/definitions/90.html)."
+                },
+                "properties": {
+                  "tags": [
+                    "CWE-89",
+                    "OWASP",
+                    "Security"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "results": [
+          {
+            "ruleId": "scurity-path-traversal",
+            "level": "warning",
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00623.java"
+                  },
+                  "region": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                }
+              }
+            ],
+            "relatedLocations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/helpers/SeparateClassRequest.java"
+                  },
+                  "region": {
+                    "startLine": 31,
+                    "endLine": 31
+                  }
+                }
+              },
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00623.java"
+                  },
+                  "region": {
+                    "startLine": 45,
+                    "endLine": 45
+                  }
+                }
+              }
+            ],
+            "message": {
+              "text": "Potentially untrusted inputs are used to access a file path"
+            }
+          },
+          {
+            "ruleId": "scurity-path-traversal",
+            "level": "warning",
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                  },
+                  "region": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                }
+              }
+            ],
+            "relatedLocations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                  },
+                  "region": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                }
+              }
+            ],
+            "message": {
+              "text": "Potentially untrusted inputs are used to access a file path"
+            }
+          },
+          {
+            "ruleId": "security-sql-injection",
+            "level": "error",
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest02265.java"
+                  },
+                  "region": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                }
+              }
+            ],
+            "relatedLocations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest02265.java"
+                  },
+                  "region": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                }
+              }
+            ],
+            "message": {
+              "text": "We detected an SQL command that might use unsanitized input."
+            }
+          }
+        ]
+      }
+    ]
+  }
