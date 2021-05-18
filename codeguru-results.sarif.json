@@ -49,14 +49,10 @@
             ]
           }
         },
-        
-        "automationDetails": { 
-            "id": "my-category/"
-          },
 
         "results": [
           {
-            "ruleId": "scurity-path-traversal",
+            "ruleId": "security-path-traversal",
             "level": "warning",
             "locations": [
               {
@@ -71,37 +67,63 @@
                 }
               }
             ],
-            
-            "relatedLocations": [
-              {
-                "physicalLocation": {
-                  "artifactLocation": {
-                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/helpers/SeparateClassRequest.java"
-                  },
-                  "region": {
-                    "startLine": 31,
-                    "endLine": 31
-                  }
+
+            "codeFlows": [
+                {
+                  "threadFlows": [
+                    {
+                      "locations": [
+                        {
+                          "location": {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00623.java"
+                                },
+                                "region": {
+                                  "startLine": 45,
+                                  "endLine": 45
+                                }
+                              }
+                            }                        
+                        },
+                        {
+                            "location": {
+                                "physicalLocation": {
+                                    "artifactLocation": {
+                                      "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/helpers/SeparateClassRequest.java"
+                                    },
+                                    "region": {
+                                      "startLine": 31,
+                                      "endLine": 31
+                                    }
+                                  }
+                                }                    
+                         },
+                        {
+                          "location": {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00623.java"
+                                },
+                                "region": {
+                                  "startLine": 57,
+                                  "endLine": 57
+                                }
+                              }
+                            }              
+                        }
+                      ]
+                    }
+                  ]
                 }
-              },
-              {
-                "physicalLocation": {
-                  "artifactLocation": {
-                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00623.java"
-                  },
-                  "region": {
-                    "startLine": 45,
-                    "endLine": 45
-                  }
-                }
-              }
-            ],
+              ],
+
             "message": {
               "text": "Potentially untrusted inputs are used to access a file path"
             }
           },
           {
-            "ruleId": "scurity-path-traversal",
+            "ruleId": "security-path-traversal",
             "level": "warning",
             "locations": [
               {
@@ -116,19 +138,44 @@
                 }
               }
             ],
-            "relatedLocations": [
-              {
-                "physicalLocation": {
-                  "artifactLocation": {
-                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
-                  },
-                  "region": {
-                    "startLine": 43,
-                    "endLine": 43
-                  }
+            "codeFlows": [
+                {
+                  "threadFlows": [
+                    {
+                      "locations": [
+                        {
+                          "location": {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                                },
+                                "region": {
+                                  "startLine": 43,
+                                  "endLine": 43
+                                }
+                              }
+                            }              
+                        },
+                        {
+                          "location": {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                                },
+                                "region": {
+                                  "startLine": 55,
+                                  "endLine": 55
+                                }
+                              }
+                            }              
+                        }
+                      ]
+                    }
+                  ]
                 }
-              }
-            ],
+              ],
+
+
             "message": {
               "text": "Potentially untrusted inputs are used to access a file path"
             }
