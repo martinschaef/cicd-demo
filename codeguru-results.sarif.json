@@ -49,6 +49,11 @@
             ]
           }
         },
+        
+        "automationDetails": { 
+            "id": "my-category/"
+          },
+
         "results": [
           {
             "ruleId": "scurity-path-traversal",
@@ -130,6 +135,7 @@
           },
           {
             "ruleId": "security-sql-injection",
+            "ruleIndex": 0,
             "level": "error",
             "locations": [
               {
