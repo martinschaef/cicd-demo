@@ -66,6 +66,7 @@
                 }
               }
             ],
+            
             "relatedLocations": [
               {
                 "physicalLocation": {
@@ -143,24 +144,52 @@
                 }
               }
             ],
-            "relatedLocations": [
-              {
-                "physicalLocation": {
-                  "artifactLocation": {
-                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest02265.java"
-                  },
-                  "region": {
-                    "startLine": 43,
-                    "endLine": 43
-                  }
-                }
-              }
-            ],
             "message": {
               "text": "We detected an SQL command that might use unsanitized input."
-            }
+            },
+
+
+            "codeFlows": [
+                {
+                  "threadFlows": [
+                    {
+                      "locations": [
+                        {
+                          "location": {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest02265.java"
+                                },
+                                "region": {
+                                  "startLine": 58,
+                                  "endLine": 58
+                                }
+                              }
+              
+                          }
+                        },
+                        {
+                          "location": {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest02265.java"
+                                },
+                                "region": {
+                                  "startLine": 43,
+                                  "endLine": 43
+                                }
+                              }
+                           }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ] 
+
+
           }
-        ]
+        ]       
       }
     ]
   }
