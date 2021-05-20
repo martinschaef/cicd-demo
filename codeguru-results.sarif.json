@@ -31,8 +31,8 @@
                 "id": "security-sql-injection",
                 "name": "SQL Injection",
                 "shortDescription": {
-                  "text": "Improper Neutralization of Special Elements used in an SQL Command",
-                  "markdown": "Improper Neutralization of Special Elements used in an SQL Command"
+                  "text": "SQL Stuff but without the Help part in the rule description",
+                  "markdown": "SQL Stuff but without the Help part in the rule description"
                 },
                 "properties": {
                   "tags": [
@@ -148,7 +148,7 @@
 
 
             "message": {
-              "text": "Potentially untrusted inputs are used to access a file path"
+              "text": "Here we have more than one location in the Locations object."
             }
           },
           {
