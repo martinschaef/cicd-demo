@@ -34,10 +34,6 @@
                   "text": "Improper Neutralization of Special Elements used in an SQL Command",
                   "markdown": "Improper Neutralization of Special Elements used in an SQL Command"
                 },
-                "help": {
-                  "text": "We detected an SQL command that might use unsanitized input. This can result in an LDAP injection. To increase the security of your code, sanitize inputs before using them. Learn more at https://cwe.mitre.org/data/definitions/90.html.",
-                  "markdown": "We detected an SQL command that might use unsanitized input. This can result in an LDAP injection. To increase the security of your code, sanitize inputs before using them. [Learn more](https://cwe.mitre.org/data/definitions/90.html)."
-                },
                 "properties": {
                   "tags": [
                     "CWE-89",
@@ -124,6 +120,19 @@
           {
             "ruleId": "security-path-traversal",
             "locations": [
+                {
+                  "location": {
+                    "physicalLocation": {
+                        "artifactLocation": {
+                          "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                        },
+                        "region": {
+                          "startLine": 43,
+                          "endLine": 43
+                        }
+                      }
+                    }              
+                },                
               {
                 "physicalLocation": {
                   "artifactLocation": {
@@ -136,42 +145,6 @@
                 }
               }
             ],
-            "codeFlows": [
-                {
-                  "threadFlows": [
-                    {
-                      "locations": [
-                        {
-                          "location": {
-                            "physicalLocation": {
-                                "artifactLocation": {
-                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
-                                },
-                                "region": {
-                                  "startLine": 43,
-                                  "endLine": 43
-                                }
-                              }
-                            }              
-                        },
-                        {
-                          "location": {
-                            "physicalLocation": {
-                                "artifactLocation": {
-                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
-                                },
-                                "region": {
-                                  "startLine": 55,
-                                  "endLine": 55
-                                }
-                              }
-                            }              
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ],
 
 
             "message": {
