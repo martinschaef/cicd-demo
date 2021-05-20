@@ -120,30 +120,32 @@
           {
             "ruleId": "security-path-traversal",
             "locations": [
-                {
-                  "location": {
-                    "physicalLocation": {
-                        "artifactLocation": {
-                          "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                        {
+                          "location": {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                                },
+                                "region": {
+                                  "startLine": 43,
+                                  "endLine": 43
+                                }
+                              }
+                            }              
                         },
-                        "region": {
-                          "startLine": 43,
-                          "endLine": 43
+                        {
+                          "location": {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                  "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                                },
+                                "region": {
+                                  "startLine": 55,
+                                  "endLine": 55
+                                }
+                              }
+                            }              
                         }
-                      }
-                    }              
-                },                
-              {
-                "physicalLocation": {
-                  "artifactLocation": {
-                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
-                  },
-                  "region": {
-                    "startLine": 55,
-                    "endLine": 55
-                  }
-                }
-              }
             ],
 
 
