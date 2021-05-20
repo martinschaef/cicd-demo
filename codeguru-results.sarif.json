@@ -121,7 +121,6 @@
             "ruleId": "security-path-traversal",
             "locations": [
                         {
-                          "location": {
                             "physicalLocation": {
                                 "artifactLocation": {
                                   "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
@@ -131,10 +130,8 @@
                                   "endLine": 43
                                 }
                               }
-                            }              
-                        },
+                            },              
                         {
-                          "location": {
                             "physicalLocation": {
                                 "artifactLocation": {
                                   "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
@@ -144,7 +141,6 @@
                                   "endLine": 55
                                 }
                               }
-                            }              
                         }
             ],
 
