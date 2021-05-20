@@ -31,8 +31,12 @@
                 "id": "security-sql-injection",
                 "name": "SQL Injection",
                 "shortDescription": {
-                  "text": "SQL Stuff but without the Help part in the rule description",
-                  "markdown": "SQL Stuff but without the Help part in the rule description"
+                  "text": "Improper Neutralization of Special Elements used in an SQL Command",
+                  "markdown": "Improper Neutralization of Special Elements used in an SQL Command"
+                },
+                "help": {
+                  "text": "We detected an SQL command that might use unsanitized input. This can result in an LDAP injection. To increase the security of your code, sanitize inputs before using them. Learn more at https://cwe.mitre.org/data/definitions/90.html.",
+                  "markdown": "We detected an SQL command that might use unsanitized input. This can result in an LDAP injection. To increase the security of your code, sanitize inputs before using them. [Learn more](https://cwe.mitre.org/data/definitions/90.html)."
                 },
                 "properties": {
                   "tags": [
@@ -120,7 +124,25 @@
           {
             "ruleId": "security-path-traversal",
             "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
+                  },
+                  "region": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                }
+              }
+            ],
+            "codeFlows": [
+                {
+                  "threadFlows": [
+                    {
+                      "locations": [
                         {
+                          "location": {
                             "physicalLocation": {
                                 "artifactLocation": {
                                   "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
@@ -130,8 +152,10 @@
                                   "endLine": 43
                                 }
                               }
-                            },              
+                            }              
+                        },
                         {
+                          "location": {
                             "physicalLocation": {
                                 "artifactLocation": {
                                   "uri": "owasp-benchmark/src/main/java/org/owasp/benchmark/testcode/BenchmarkTest01572.java"
@@ -141,12 +165,17 @@
                                   "endLine": 55
                                 }
                               }
+                            }              
                         }
-            ],
+                      ]
+                    }
+                  ]
+                }
+              ],
 
 
             "message": {
-              "text": "Here we have more than one location in the Locations object."
+              "text": "Potentially untrusted inputs are used to access a file path"
             }
           },
           {
