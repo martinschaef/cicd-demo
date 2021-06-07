@@ -63,20 +63,24 @@ jobs:
         fetch-depth: 0
         submodules: 'true'
 
+
+    # Extra step requied for BugBash
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
-      continue-on-error: true
+      if: ${{ always() }}
       with:
-        repository: vijejain/cicd-actions
+        repository: vijejain/cicd-actions-bugbash
         ref: refs/heads/main
-        token: ${{ secrets.PAT_TOKEN }}
-        path: ./.github/vijejain/cicd-actions
+        token: ${{ secrets.PAT }}
+        path: ./.github/vijejain/cicd-actions-bugbash
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
+        
     # Download the artifacts AFTER the checkout, otherwise the git checkout will override the
     # content of this folder.
     - name: Download all aritfacts
@@ -90,12 +94,12 @@ jobs:
       working-directory: ./      
 
     - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions 
+      uses: ./.github/vijejain/cicd-actions-bugbash
       continue-on-error: true
       with:          
-        name: cicd-repo-2
-        source_path: ./
+        s3_bucket: codeguru-reviewer-github-submodule
         build_path: ./analyzed_jars/${{ matrix.cwe }}
+        
     - run: |
         mkdir ./${{ matrix.cwe }}_findings
         cp ./*.json ./${{ matrix.cwe }}_findings || true
