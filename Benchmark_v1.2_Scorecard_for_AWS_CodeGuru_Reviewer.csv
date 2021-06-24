@@ -1,4 +1,4 @@
-# test name, category, CWE, real vulnerability, identified by tool, pass/fail, Benchmark version: 1.2, Actual results generated: 2021-06-7
+# test name, category, CWE, real vulnerability, identified by tool, pass/fail, Benchmark version: 1.2, Actual results generated: 2021-06-24
 BenchmarkTest00001, pathtraver, 22, true, false, fail
 BenchmarkTest00002, pathtraver, 22, true, false, fail
 BenchmarkTest00003, hash, 328, true, false, fail
