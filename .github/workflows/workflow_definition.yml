@@ -63,17 +63,6 @@ jobs:
         fetch-depth: 0
         submodules: 'true'
 
-
-    # Extra step requied for BugBash
-    - name: Checkout the action from a private repository
-      uses: actions/checkout@v2
-      if: ${{ always() }}
-      with:
-        repository: vijejain/cicd-actions-bugbash
-        ref: refs/heads/main
-        token: ${{ secrets.PAT }}
-        path: ./.github/vijejain/cicd-actions-bugbash
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -93,8 +82,8 @@ jobs:
         ls -R ./analyzed_jars
       working-directory: ./      
 
-    - name: AWS CodeGuru Reviewer
-      uses: ./.github/vijejain/cicd-actions-bugbash
+    - name: CodeGuru Reviewer
+      uses: aws-actions/codeguru-reviewer@v1.1
       continue-on-error: true
       with:          
         s3_bucket: codeguru-reviewer-github-submodule
