@@ -1,7 +1,7 @@
 #!/bin/sh
 mkdir -p owasp-benchmark/results
 
-jq -rs '.[0].RecommendationSummaries=([.[].RecommendationSummaries]|flatten)|.[0]' $(find . -type f -name "codeguru-results.json" )  > owasp-benchmark/results/combined.json
+jq -rs '{findings: (([.[].runs[0].results]) | flatten)}' $(find . -type f -name "codeguru-results.sarif.json" )  > owasp-benchmark/results/combined.json
 
 # Remove findings of other tools
 rm owasp-benchmark/results/Benchmark_1.2-*.xml

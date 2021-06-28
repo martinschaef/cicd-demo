@@ -33,7 +33,7 @@ public class AWSCodeGuruReader extends Reader {
 	public TestResults parse( File f ) throws Exception {
 		String content = new String(Files.readAllBytes(Paths.get(f.getPath())));
 
-		JSONObject obj = new JSONObject(content);
+		JSONArray recommendations = (new JSONObject(content)).getJSONArray("findings");
 		int version = 1; // TODO Need a version string
 
 		final TestResults testResults =
@@ -41,7 +41,6 @@ public class AWSCodeGuruReader extends Reader {
 
 		testResults.setTime("TODO"); // NEED THE SCAN TIME
 
-        JSONArray recommendations = obj.getJSONArray("RecommendationSummaries");
 		for (int i = 0; i < recommendations.length(); i++)
 		{
 			TestCaseResult testCaseResult = parseCodeGuruFinding( recommendations.getJSONObject(i), 1 );
@@ -57,16 +56,23 @@ public class AWSCodeGuruReader extends Reader {
 	private TestCaseResult parseCodeGuruFinding(JSONObject finding, int version) {
 	    try {
             TestCaseResult testCaseResult = new TestCaseResult();
-            final String filePath = finding.getString("FilePath");
+            final JSONObject physicalLocation = finding.getJSONArray("locations")
+                                                       .getJSONObject(0)
+                                                       .getJSONObject("physicalLocation");
+
+
+            final String filePath = physicalLocation.getJSONObject("artifactLocation")
+                                                    .getString("uri");
             int benchmarkNumber = 0;
+            final String message =  finding.getJSONObject("message").getString("text");
             if (filePath.contains(BenchmarkScore.TESTCASENAME)) {
                 final String fileName = new File(filePath).getName();
                 final String benchmarkNumString = fileName.replace(BenchmarkScore.TESTCASENAME, "")
-                                                       .substring(0, 5);
+                                                          .substring(0, 5);
                 benchmarkNumber = Integer.parseInt(benchmarkNumString);
             } else {
                 Pattern p = Pattern.compile("Benchmark\\d{5}");
-                Matcher m = p.matcher(finding.getString("Description"));
+                Matcher m = p.matcher(message);
                 while (m.find()) {
                     final String benchmarkNumString = m.group().replace(BenchmarkScore.TESTCASENAME, "");
                     benchmarkNumber = Integer.parseInt(benchmarkNumString);
@@ -77,7 +83,7 @@ public class AWSCodeGuruReader extends Reader {
             if (benchmarkNumber > 0) {
                 testCaseResult.setNumber(benchmarkNumber);
                 testCaseResult.setCategory("TODO"); // TODO
-                testCaseResult.setEvidence(finding.getString("Description"));
+                testCaseResult.setEvidence(message);
                 int cweNumber = hackCWENumber(testCaseResult.getEvidence());
                 testCaseResult.setCWE(cweNumber); // TODO: HACK
                 System.err.println("Found CWE " + testCaseResult.getCWE() + " in benchmark " + testCaseResult.getNumber() );
