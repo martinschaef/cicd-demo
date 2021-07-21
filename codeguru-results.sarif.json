@@ -9,7 +9,7 @@
             "informationUri": "https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/how-codeguru-reviewer-works.html",
             "rules": [
               {
-                "id": "security-path-traversal",
+                "id": "this-is-a-super-long-rule-id-just-to-test-the-layout-in-github---lets-see-how-this-renders",
                 "name": "Path Traversal",
                 "shortDescription": {
                   "text": "Improper Limitation of a Pathname to a Restricted Directory",
@@ -52,7 +52,7 @@
 
         "results": [
           {
-            "ruleId": "security-path-traversal",
+            "ruleId": "this-is-a-super-long-rule-id-just-to-test-the-layout-in-github---lets-see-how-this-renders",
             "locations": [
               {
                 "physicalLocation": {
@@ -122,7 +122,7 @@
             }
           },
           {
-            "ruleId": "security-path-traversal",
+            "ruleId": "this-is-a-super-long-rule-id-just-to-test-the-layout-in-github---lets-see-how-this-renders",
             "locations": [
               {
                 "physicalLocation": {
