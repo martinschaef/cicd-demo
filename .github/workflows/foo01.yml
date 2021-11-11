@@ -1,0 +1,21 @@
+name: Print all sorts of hashes
+
+on:
+  [push]
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
+    - name: cool test
+      run: echo git rev-parse $GITHUB_BASE_REF $(git rev-parse $GITHUB_BASE_REF)
+    - run: echo git log after $(git log --pretty=%P -n 1 ${{ github.event.after }} )
+    - run: echo github.event.before ${{ github.event.before }}, github.event.after ${{ github.event.after }}
