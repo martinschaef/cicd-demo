@@ -1,0 +1,22 @@
+name: Print all sorts of hashes
+
+on:
+  [push]
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        
+    - run: >
+      commit_id=${{ github.event.before || github.event.pull_request.base.sha }}    
+      if $([[ $x =~ ^0*$ ]]; then
+        commit_id=$(git log --pretty=%P -n 1 ${{ github.event.after }})
+      fi
+      echo The real before-commit id is $commit_id
+    - run: echo before hash ${{ github.event.before || github.event.pull_request.base.sha }} || $(git log --pretty=%P -n 1 ${{ github.event.after }})
+    - run: echo after hash ${{ github.event.after }}
+    - run: echo github.event.before ${{ github.event.before }}, github.event.after ${{ github.event.after }}
